@@ -16,6 +16,34 @@
 
 body {
   color: var(--foreground);
-  background: var(--background);
+  background:  radial-gradient(circle, rgb(153, 245, 223), rgb(60, 173, 152));
   font-family: Arial, Helvetica, sans-serif;
 }
+h1{
+  @apply text-6xl text-center my-5;
+  color: coral;
+}
+
+
+a{
+  color:#b80b70 ;
+ 
+  font-size: large;
+  text-align: center;
+  margin-left: 2%;
+}
+
+a:hover{
+ color:#9b7106 !important;
+ background-color: #f0d0e2;
+}
+
+
+button{
+  background-color: rgb(0, 0, 0);
+  color:rgba(255, 255, 255, 0.341);
+  width:5%;
+  height:max-content;
+  border-radius: 8%;
+}
+
