@@ -16,34 +16,73 @@
 
 body {
   color: var(--foreground);
-  background:  radial-gradient(circle, rgb(153, 245, 223), rgb(60, 173, 152));
+  background: radial-gradient(circle,  cornsilk,rgba(56, 218, 185, 0.268),rgb(189, 227, 226)) !important;
   font-family: Arial, Helvetica, sans-serif;
 }
-h1{
+
+h1 {
   @apply text-6xl text-center my-5;
   color: coral;
 }
 
 
-a{
-  color:#b80b70 ;
- 
-  font-size: large;
-  text-align: center;
+button{
+  background-color: blue;
+}
+
+/* Style both links and the button consistently */
+.navbar-links li {
   margin-left: 2%;
 }
 
-a:hover{
- color:#9b7106 !important;
- background-color: #f0d0e2;
+.navbar-links a,
+.navbar-links .button-drop {
+  color: hsl(325, 89%, 38%);
+  font-size: large;
+  text-align: center;
+  display: inline-block; /* Ensures consistent sizing */
 }
 
-
-button{
-  background-color: rgb(0, 0, 0);
-  color:rgba(255, 255, 255, 0.341);
-  width:5%;
-  height:max-content;
-  border-radius: 8%;
+.navbar-links a:hover,
+.navbar-links .button-drop:hover {
+  color: #9b7106 !important;
 }
 
+.button-drop {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: 1.25rem; /* Matches text-xl */
+}
+
+.dropdown-menu {
+  position: absolute;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  padding: 10px;
+  z-index: 10;
+  min-width: 120px;
+}
+
+.dropdown-menu-below {
+  top: 100%;
+  left: 0;
+  margin-top: 5px;
+}
+
+.dropdown-menu li {
+  list-style: none;
+  margin: 5px 0;
+}
+
+.dropdown-menu li a {
+  color: black;
+  text-decoration: none;
+  display: block;
+}
+
+.hover-effect:hover {
+  color: #9b7106;
+}
