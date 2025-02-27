@@ -58,8 +58,23 @@ export default function Todos() {
   };
 
   const delItem = async (id) => {
-    // Remove item from UI (you can also make a DELETE API call if needed)
-    setTodos(todos.filter((el, ind) => id !== ind));
+    try {
+      const response = await fetch("/api/todos", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id }),
+      });
+
+      if (response.ok) {
+        setTodos(todos.filter((todo) => todo.id !== id));
+      } else {
+        console.error("Failed to delete todo");
+      }
+    } catch (error) {
+      console.error("Error deleting todo:", error);
+    }
   };
 
   const onEnter = (k) => {
@@ -72,14 +87,17 @@ export default function Todos() {
     <div className="flex flex-col items-center gap-8">
       <ul className="text-slate-900 w-1/2">
         {todos.length !== 0 ? (
-          todos.map((el, ind) => (
+          todos.map((todo, index) => (
             <li
-              key={ind}
+              key={todo.id}
               className="flex justify-between items-center bg-gray-100 p-2 mb-2 rounded shadow"
             >
-              <span>{el.title}</span> {/* Assuming 'title' is a property */}
+              <span>
+                {index + 1}
+                {todo.title}
+              </span>
               <button
-                onClick={() => delItem(ind)}
+                onClick={() => delItem(todo.id)}
                 className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-700 transition duration-300"
               >
                 Delete
@@ -90,6 +108,7 @@ export default function Todos() {
           <p className="text-center">No items</p>
         )}
       </ul>
+      <h2 className="text-xl text-center text-black">Add a new item</h2>
       <input
         className="text-black text-center w-1/2 p-2 mb-2 border rounded"
         type="text"

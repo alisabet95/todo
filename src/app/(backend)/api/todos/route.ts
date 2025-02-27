@@ -38,3 +38,25 @@ export async function POST(req: Request) {
     );
   }
 }
+// DELETE API - Delete a todo by id
+export async function DELETE(req: Request) {
+  try {
+    const { id } = await req.json();
+    if (!id) {
+      return NextResponse.json({ error: "ID is required" }, { status: 400 });
+    }
+
+    // Delete the todo by id
+    const deletedTodo = await prisma.task.delete({
+      where: { id: Number(id) },
+    });
+
+    return NextResponse.json(deletedTodo, { status: 200 });
+  } catch (error) {
+    console.error("Error deleting todo:", error); // Log the error details
+    return NextResponse.json(
+      { error: "Failed to delete todo", details: error.message },
+      { status: 500 }
+    );
+  }
+}
