@@ -92,8 +92,9 @@ export default function Todos() {
               key={todo.id}
               className="flex justify-between items-center bg-gray-100 p-2 mb-2 rounded shadow"
             >
+              <span className="text-purple-500">{index + 1}</span>
               <span>
-                {index + 1}
+                {" - "}
                 {todo.title}
               </span>
               <button
