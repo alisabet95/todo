@@ -92,11 +92,11 @@ export default function Todos() {
               key={todo.id}
               className="flex justify-between items-center bg-gray-100 p-2 mb-2 rounded shadow"
             >
-              <span className="text-purple-500">{index + 1}</span>
-              <span>
-                {" - "}
-                {todo.title}
+              <span className="text-purple-700">
+                {index + 1}
+                {" -"}
               </span>
+              <span>{todo.title}</span>
               <button
                 onClick={() => delItem(todo.id)}
                 className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-700 transition duration-300"
