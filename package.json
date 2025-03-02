@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "postinstall": "prisma generate --schema=src/app/lib/schema.prisma",
+    "postinstall": "prisma generate --schema=src/app/lib/prisma/schema.prisma",
     "dev": "next dev --turbopack",
-    "build": "next build && prisma generate --schema=src/app/lib/schema.prisma",
+    "build": "next build && prisma generate --schema=src/app/lib/prisma/schema.prisma",
     "start": "next start",
     "lint": "next lint"
   },
