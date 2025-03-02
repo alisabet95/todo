@@ -42,7 +42,7 @@ export async function POST(request) {
   let body;
   try {
     body = await request.json();
-    console.log("Received body:", body); // Debugging log
+    console.log("Received body:", body);
   } catch (error) {
     console.error("Error parsing JSON:", error);
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
@@ -54,20 +54,25 @@ export async function POST(request) {
     return NextResponse.json({ error: "Title is required" }, { status: 400 });
   }
 
-  const user = await prisma.user.findUnique({ where: { id: session.user.id } });
+  try {
+    const user = await prisma.user.findUnique({ where: { id: Number(session.user.id) } });
 
-  if (!user) {
-    return NextResponse.json({ error: "User not found" }, { status: 404 });
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    const newtask = await prisma.task.create({
+      data: {
+        title,
+        userId: user.id, // Already a number from Prisma
+      },
+    });
+
+    return NextResponse.json(newtask, { status: 201 });
+  } catch (error) {
+    console.error("Database error:", error);
+    return NextResponse.json({ error: "Server error", details: error.message }, { status: 500 });
   }
-
-  const newtask = await prisma.task.create({
-    data: {
-      title,
-      userId: Number(user.id),
-    },
-  });
-
-  return NextResponse.json(newtask, { status: 201 });
 }
 export async function DELETE(request) {
   const session = await getServerSession(authOptions);

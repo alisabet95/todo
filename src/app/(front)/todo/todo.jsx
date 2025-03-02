@@ -59,9 +59,7 @@ export default function Todos() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              session?.token || session?.accessToken || ""
-            }`,
+            Authorization: `Bearer ${session?.accessToken || ""}`,
           },
           body: JSON.stringify(payload),
         });
