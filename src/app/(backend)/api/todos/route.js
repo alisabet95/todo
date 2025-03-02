@@ -81,25 +81,63 @@ export async function DELETE(request) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
 
-  const { id } = await request.json();
+  let body;
+  try {
+    body = await request.json();
+  } catch (error) {
+    console.error("Error parsing JSON:", error);
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
+
+  const { id } = body;
 
   if (!id) {
-    return NextResponse.json({ error: "task ID is required" }, { status: 400 });
+    return NextResponse.json({ error: "Task ID is required" }, { status: 400 });
   }
 
-  const user = await prisma.user.findUnique({ where: { id: session.user.id } });
+  try {
+    // Convert session.user.id to number if it's a string
+    const userId = Number(session.user.id);
+    const taskId = Number(id);
 
-  if (!user) {
-    return NextResponse.json({ error: "User not found" }, { status: 404 });
+    if (isNaN(taskId)) {
+      return NextResponse.json({ error: "Invalid task ID" }, { status: 400 });
+    }
+
+    const user = await prisma.user.findUnique({ 
+      where: { id: userId }
+    });
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    const task = await prisma.task.findUnique({ 
+      where: { id: taskId }
+    });
+
+    if (!task) {
+      return NextResponse.json({ error: "Task not found" }, { status: 404 });
+    }
+
+    if (task.userId !== userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    }
+
+    const deletedTask = await prisma.task.delete({ 
+      where: { id: taskId }
+    });
+
+    return NextResponse.json({ 
+      message: "Task deleted successfully",
+      task: deletedTask 
+    }, { status: 200 });
+
+  } catch (error) {
+    console.error("Delete error:", error);
+    return NextResponse.json({ 
+      error: "Server error",
+      details: error.message 
+    }, { status: 500 });
   }
-
-  const task = await prisma.task.findUnique({ where: { id } });
-
-  if (!task || task.userId !== user.id) {
-    return NextResponse.json({ error: "task not found or unauthorized" }, { status: 404 });
-  }
-
-  await prisma.task.delete({ where: { id } });
-
-  return NextResponse.json({ message: "task deleted" }, { status: 200 });
 }
