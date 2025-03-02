@@ -13,5 +13,6 @@
       "database": "to-dos",
       "username": "root"
     }
-  ]
+  ],
+  "cSpell.words": ["authen", "nextauth", "rpcgame"]
 }

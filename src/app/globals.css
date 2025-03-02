@@ -27,7 +27,16 @@ h1 {
 
 
 button{
-  background-color: blue;
+  background-color: #3b82f6; /* Blue background */
+  color: white; /* White text */
+  padding: 0.5rem 1rem; /* Padding for size */
+  border-radius: 0.375rem; /* Rounded corners */
+  
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+button:hover{
+  background-color: #1e40af;
 }
 
 /* Style both links and the button consistently */
@@ -85,4 +94,14 @@ button{
 
 .hover-effect:hover {
   color: #9b7106;
+}
+
+
+.fade-in {
+  animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }

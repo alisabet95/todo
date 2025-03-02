@@ -7,14 +7,15 @@ import classNames from "classnames";
 const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const currentPath = usePathname();
+  const [time, setTime] = useState(new Date());
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
 
   const links = [
     { name: "Home", href: "/" },
     { name: "To-Do", href: "/todo" },
-    { name: "Services", href: "/services" },
-    { name: "Contact", href: "/contact" },
+    { name: "RPC Game", href: "/rpcgame" },
+    { name: "Album", href: "/album" },
     { name: "Ali", href: "/stuff" },
   ];
 
@@ -43,11 +44,22 @@ const Navbar = () => {
     };
   }, [dropdownOpen]);
 
+  useEffect(() => {
+    const timerId = setInterval(() => {
+      setTime(new Date());
+    }, 60000);
+    return () => clearInterval(timerId);
+  }, []);
+
   // Debug: Log the current path and comparisons
 
   return (
     <nav className="flex-1 my-1">
-      <ul className="navbar-links flex flex-wrap items-center">
+      <ul className="navbar-links flex flex-wrap items-center pl-2">
+        <p className="text-green-800 text-left fade-in">
+          {" "}
+          {time.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+        </p>
         {links.map((link, index) => (
           <li key={index}>
             <Link

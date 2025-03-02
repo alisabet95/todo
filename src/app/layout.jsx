@@ -1,8 +1,10 @@
+// src/app/layout.jsx (Server-Side)
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "./navbar";
+import AppWrapper from "./AppWrapper"; // New client-side wrapper
 import "@radix-ui/themes/styles.css";
 import { Theme } from "@radix-ui/themes";
+import Navbar from "./navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,8 +27,10 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Navbar />
-        {children}
+        <AppWrapper>
+          <Navbar />
+          {children}
+        </AppWrapper>
       </body>
     </html>
   );
