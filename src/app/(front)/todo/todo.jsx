@@ -116,7 +116,7 @@ export default function Todos() {
 
   if (status === "loading") return <div>Loading...</div>;
   if (status === "unauthenticated")
-    return <div>Please log in to view todos.</div>;
+    return <h1>Please log in to view todos.</h1>;
 
   return (
     <div className="flex flex-col items-center gap-8">
