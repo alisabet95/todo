@@ -25,6 +25,11 @@ h1 {
   color: coral;
 }
 
+h2 {
+  @apply text-3xl text-center my-5;
+  color: rgb(127, 80, 255);
+}
+
 
 button{
   background-color: #3b82f6; /* Blue background */
