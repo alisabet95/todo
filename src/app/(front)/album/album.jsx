@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession, signIn, signOut } from "next-auth/react";
@@ -31,6 +30,7 @@ export default function Album() {
   const [photos, setPhotos] = useState([]);
   const [file, setFile] = useState(null);
   const [title, setTitle] = useState("");
+  const [uploadProgress, setUploadProgress] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
@@ -51,15 +51,30 @@ export default function Album() {
     formData.append("username", username);
     formData.append("title", title);
 
-    const res = await fetch("/api/photos/upload", {
-      method: "POST",
-      body: formData,
-    });
-    if (res.ok) {
-      setFile(null);
-      setTitle("");
-      fetchPhotos(username, setPhotos);
-    }
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "/api/photos/upload", true);
+
+    xhr.upload.onprogress = (event) => {
+      if (event.lengthComputable) {
+        const percentComplete = Math.round((event.loaded / event.total) * 100);
+        setUploadProgress(percentComplete);
+      }
+    };
+
+    xhr.onload = () => {
+      if (xhr.status === 201) {
+        setFile(null);
+        setTitle("");
+        setUploadProgress(0);
+        fetchPhotos(username, setPhotos);
+      }
+    };
+
+    xhr.onerror = () => {
+      console.error("Upload failed.");
+    };
+
+    xhr.send(formData);
   };
 
   const handleDelete = async (photoId) => {
@@ -119,6 +134,15 @@ export default function Album() {
           className="bg-green-500 text-white p-2 rounded"
         />
       </form>
+      {uploadProgress > 0 && (
+        <div className="w-1/2 bg-gray-200 rounded-full h-4 mb-4">
+          <div
+            className="bg-blue-500 h-4 rounded-full"
+            style={{ width: `${uploadProgress}%` }}
+          ></div>
+          <p className="text-center text-black">{uploadProgress}%</p>
+        </div>
+      )}
       <div className="grid grid-cols-2 gap-4">
         {photos.map((photo) => (
           <div key={photo.id} className="border p-2 rounded">
