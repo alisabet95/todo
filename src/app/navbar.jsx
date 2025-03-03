@@ -54,7 +54,7 @@ const Navbar = () => {
   // Debug: Log the current path and comparisons
 
   return (
-    <nav className="flex-1 my-1">
+    <nav className="flex-1 my-3 pl-4">
       <ul className="navbar-links flex flex-wrap items-center pl-2">
         <p className="text-green-800 text-left fade-in">
           {" "}

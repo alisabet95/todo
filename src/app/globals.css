@@ -20,6 +20,15 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+
+input[text]{
+  @apply text-black text-center
+}
+
+div{
+  @apply text-center
+}
+
 h1 {
   @apply text-6xl text-center my-5;
   color: coral;
@@ -30,6 +39,13 @@ h2 {
   color: rgb(127, 80, 255);
 }
 
+h3{
+  color: rgb(244, 80, 148)
+}
+
+p{
+  @apply text-black
+}
 
 button{
   background-color: #3b82f6; /* Blue background */

@@ -112,7 +112,7 @@ export default function Album() {
         placeholder="Enter your username"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
-        className="p-2 border rounded w-1/2 text-black"
+        className="p-2 border rounded w-1/2 text-black text-center"
       />
       <form onSubmit={handleUpload} className="flex flex-col gap-4 w-1/2">
         <input
@@ -125,7 +125,7 @@ export default function Album() {
           placeholder="Photo title (optional)"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="p-2 border rounded"
+          className="p-2 border rounded text-black text-center"
         />
         <ButtonD
           ph="Upload Photo"
