@@ -51,13 +51,10 @@ const Navbar = () => {
     return () => clearInterval(timerId);
   }, []);
 
-  // Debug: Log the current path and comparisons
-
   return (
-    <nav className="flex-1 my-3 pl-4">
-      <ul className="navbar-links flex flex-wrap items-center pl-2">
-        <p className="text-green-800 text-left fade-in">
-          {" "}
+    <nav className="bg-blue-400 rounded-lg p-4 shadow-md">
+      <ul className="navbar-links flex flex-wrap items-center space-x-4">
+        <p className="text-white text-left fade-in">
           {time.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
         </p>
         {links.map((link, index) => (
@@ -66,6 +63,7 @@ const Navbar = () => {
               href={link.href}
               className={classNames({
                 underline: currentPath === link.href,
+                "text-white": currentPath !== link.href,
               })}
             >
               {link.name}
@@ -75,14 +73,14 @@ const Navbar = () => {
         <li className="relative">
           <button
             onClick={toggleDropdown}
-            className="button-drop text-xl"
+            className="button-drop text-xl text-white"
             ref={buttonRef}
           >
             Menu
           </button>
           {dropdownOpen && (
             <ul
-              className="dropdown-menu dropdown-menu-below flex-col"
+              className="dropdown-menu absolute bg-cyan-400 rounded-lg shadow-lg mt-2 p-2 flex flex-col space-y-2"
               ref={dropdownRef}
             >
               <li>

@@ -67,7 +67,7 @@ button:hover{
 
 .navbar-links a,
 .navbar-links .button-drop {
-  color: hsl(325, 89%, 38%);
+  color: hsl(0, 0%, 0%);
   font-size: large;
   text-align: center;
   display: inline-block; /* Ensures consistent sizing */
@@ -75,7 +75,7 @@ button:hover{
 
 .navbar-links a:hover,
 .navbar-links .button-drop:hover {
-  color: #9b7106 !important;
+  color: #5a4207 !important;
 }
 
 .button-drop {
@@ -88,7 +88,7 @@ button:hover{
 
 .dropdown-menu {
   position: absolute;
-  background-color: white;
+  background-color: rgb(128, 230, 128);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
   padding: 10px;
@@ -126,3 +126,4 @@ button:hover{
   0% { opacity: 0; }
   100% { opacity: 1; }
 }
+
