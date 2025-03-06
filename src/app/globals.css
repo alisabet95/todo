@@ -127,3 +127,6 @@ button:hover{
   100% { opacity: 1; }
 }
 
+input{
+  @apply text-center text-black
+}
