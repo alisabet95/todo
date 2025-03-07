@@ -35,7 +35,7 @@ export function Counter() {
       <input value={meq} onChange={handleMeq} />
       <ButtonD
         onClick={() => dispatch(incrementByAmount(Number(meq)))}
-        ph="add"
+        ph="add or remove"
       />
       <p>{count}</p>
     </div>
