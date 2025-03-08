@@ -36,8 +36,8 @@ export default function Photos() {
               <Image
                 src={photo.src}
                 alt={photo.title}
-                height={250}
-                width={200}
+                height={300}
+                width={280}
                 className="rounded-md"
               />
             </div>

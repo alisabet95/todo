@@ -116,6 +116,7 @@ export default function HomeAu() {
         </button>
       </form>
       <ButtonD onClick={() => router.push("/todo")} ph="Go To-Do" />
+      <ButtonD onClick={() => router.push("/sign-page")} ph="Go sign in" />
     </div>
   );
 }
