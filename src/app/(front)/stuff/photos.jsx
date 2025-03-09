@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import ButtonD from "../(material)/button";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Photos() {
   const [photos, setPhotos] = useState([]);
@@ -33,13 +34,15 @@ export default function Photos() {
           {photos.map((photo) => (
             <div key={photo.id} className="flex flex-col items-center">
               <h3 className="mb-2">{photo.title}</h3>
-              <Image
-                src={photo.src}
-                alt={photo.title}
-                height={300}
-                width={280}
-                className="rounded-md"
-              />
+              <Link href={`/stuff/${photo.id}`}>
+                <Image
+                  src={photo.src}
+                  alt={photo.title}
+                  height={300}
+                  width={280}
+                  className="rounded-md"
+                />
+              </Link>
             </div>
           ))}
         </div>
