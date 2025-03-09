@@ -12,3 +12,11 @@ export async function GET(request) {
 
   return NextResponse.json({ error: "Invalid URL" }, { status: 404 });
 }
+
+
+export async function POST(req) {
+
+  const body = await req.json()
+  
+  return NextResponse.json(body)
+}

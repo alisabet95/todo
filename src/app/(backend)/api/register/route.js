@@ -1,4 +1,3 @@
-
 import { NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma/client";
 import bcrypt from "bcryptjs";
@@ -10,9 +9,16 @@ export async function POST(request) {
       return NextResponse.json({ error: "All fields are required" }, { status: 400 });
     }
 
-    const existingUser = await prisma.user.findUnique({ where: { username } });
-    if (existingUser) {
+    // Check for existing username
+    const existingUsername = await prisma.user.findUnique({ where: { username } });
+    if (existingUsername) {
       return NextResponse.json({ error: "Username already taken" }, { status: 400 });
+    }
+
+    // Check for existing email
+    const existingEmail = await prisma.user.findUnique({ where: { email } });
+    if (existingEmail) {
+      return NextResponse.json({ error: "Email already registered" }, { status: 400 });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);

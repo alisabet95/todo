@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { photos } from "../photos";
 
 export async function GET(req, { params }) {
@@ -9,3 +9,14 @@ export async function GET(req, { params }) {
     const photo = photos.find(photo => photo.id === parseInt(id));
     return NextResponse.json(photo);
 }
+
+export async function POST(req, {params}) {
+
+    const body = await req.json()
+    const {id} = await params;
+   
+    
+    
+    return NextResponse.json({body, id})
+
+  }

@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const handlePh = async (d) => {
   try {
-    const res = await fetch(process.env.NEXTAUTH_URL + `/api/some-photos/${d}`);
+    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/some-photos/${d}`);
     if (!res.ok) {
       throw new Error("Wrong stuff");
     }
