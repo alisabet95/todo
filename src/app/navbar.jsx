@@ -95,13 +95,18 @@ const Navbar = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/settings" className="hover-effect">
-                  Settings
+                <Link href="/products" className="hover-effect">
+                  Products
                 </Link>
               </li>
               <li>
                 <Link href="/logout" className="hover-effect">
                   Logout
+                </Link>
+              </li>
+              <li>
+                <Link href="/sorting" className="hover-effect">
+                  Sorting
                 </Link>
               </li>
             </ul>

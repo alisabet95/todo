@@ -137,3 +137,6 @@ input{
   @apply text-center text-black
 }
 
+span{
+  @apply text-black text-center
+ }

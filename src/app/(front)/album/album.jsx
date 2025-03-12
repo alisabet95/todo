@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { useSession, signIn, signOut } from "next-auth/react";
 import ButtonD from "../(material)/button";
 
@@ -15,40 +14,48 @@ const debounce = (func, delay) => {
 };
 
 const fetchPhotos = async (username, setPhotos) => {
+  if (!username) return;
   const res = await fetch(`/api/photos/${username}`);
   if (res.ok) {
     const data = await res.json();
     setPhotos(data);
+  } else {
+    console.error("Failed to fetch photos:", await res.text());
   }
 };
 
 const debouncedFetchPhotos = debounce(fetchPhotos, 500);
 
 export default function Album() {
-  const { data: session } = useSession();
-  const [username, setUsername] = useState(""); // Manual entry for now
+  const { data: session, status } = useSession();
   const [photos, setPhotos] = useState([]);
   const [file, setFile] = useState(null);
   const [title, setTitle] = useState("");
   const [uploadProgress, setUploadProgress] = useState(0);
-  const router = useRouter();
 
+  // Debugging session data
   useEffect(() => {
-    document.title = "Photo Album";
-    if (username) {
-      debouncedFetchPhotos(username, setPhotos);
+    console.log("Session Status:", status);
+    console.log("Session Data:", session);
+    console.log("Cookies:", document.cookie); // Check if next-auth.session-token exists
+  }, [status, session]);
+
+  // Fetch photos when session is authenticated
+  useEffect(() => {
+    if (status === "authenticated" && session?.user?.username) {
+      debouncedFetchPhotos(session.user.username, setPhotos);
     } else {
       setPhotos([]);
     }
-  }, [username]);
+  }, [status, session]);
 
   const handleUpload = async (e) => {
     e.preventDefault();
-    if (!file || !username) return;
+    if (!file || !session?.user?.username) return;
 
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("username", username);
+    formData.append("username", session.user.username); // Use session.user.username
     formData.append("title", title);
 
     const xhr = new XMLHttpRequest();
@@ -66,7 +73,9 @@ export default function Album() {
         setFile(null);
         setTitle("");
         setUploadProgress(0);
-        fetchPhotos(username, setPhotos);
+        fetchPhotos(session.user.username, setPhotos); // Use session.user.username
+      } else {
+        console.error("Upload failed:", xhr.statusText);
       }
     };
 
@@ -82,9 +91,15 @@ export default function Album() {
       method: "DELETE",
     });
     if (res.ok) {
-      fetchPhotos(username, setPhotos);
+      fetchPhotos(session.user.username, setPhotos); // Use session.user.username
+    } else {
+      console.error("Failed to delete photo:", await res.text());
     }
   };
+
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
 
   if (!session) {
     return (
@@ -107,13 +122,20 @@ export default function Album() {
       >
         Sign Out
       </button>
-      <input
-        type="text"
-        placeholder="Enter your username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        className="p-2 border rounded w-1/2 text-black text-center"
-      />
+      <h2 className="text-black">
+        Welcome,{" "}
+        <span
+          style={{
+            color: session.user.username === "parisajoon" ? "red" : "black",
+          }}
+        >
+          {session.user.username === "parisajoon"
+            ? "parisa joone Ali"
+            : session.user.username}
+        </span>
+        !
+      </h2>{" "}
+      {/* Use session.user.username */}
       <form onSubmit={handleUpload} className="flex flex-col gap-4 w-1/2">
         <input
           type="file"
@@ -151,7 +173,7 @@ export default function Album() {
               alt={photo.title || "Photo"}
               className="w-full h-auto"
             />
-            <p>{photo.title}</p>
+            <p>{photo.title || "No title"}</p>
             <p>{new Date(photo.uploadedAt).toLocaleDateString()}</p>
             <ButtonD
               style={{ textAlign: "center", margin: "0 auto" }}
