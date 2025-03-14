@@ -116,11 +116,7 @@ const Navbar = () => {
                   Sorting
                 </Link>
               </li>
-              <li>
-                <Link href="/uploading" className="hover-effect">
-                  Upload
-                </Link>
-              </li>
+
               <li>
                 <Link href="/even" className="hover-effect">
                   Odd Or Even
