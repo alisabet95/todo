@@ -1,0 +1,71 @@
+"use client";
+import React, { useState } from "react";
+import ButtonD from "../(material)/button";
+
+export default function OddOrEven() {
+  const [number, setNumber] = useState("");
+  const [data, setData] = useState(null);
+
+  async function getData() {
+    try {
+      const res = await fetch(`/api/odd-or?num=${number}`);
+      const data = await res.json();
+      setData(data);
+      console.log(data);
+      console.log("Hello from the front-end");
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const keyDown = (e) => {
+    if (e.key === "Enter") {
+      getData();
+    }
+  };
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-blue-500 p-4 my-0">
+      <div className="bg-white p-12 rounded-lg shadow-lg w-full max-w-2xl">
+        <h1 className="text-4xl font-bold mb-8 text-center text-blue-700">
+          Odd or Even Checker
+        </h1>
+        <input
+          placeholder="Write a number"
+          type="number"
+          value={number}
+          onChange={(e) => setNumber(e.target.value)}
+          className="w-full p-4 mb-8 border rounded focus:outline-none focus:ring-2 focus:ring-blue-700 text-xl"
+          onKeyDown={keyDown}
+        />
+        <ButtonD
+          onClick={getData}
+          ph="Check"
+          className="w-full bg-blue-700 text-white py-4 rounded hover:bg-blue-800 text-xl"
+        />
+        {data && (
+          <p className="mt-8 text-center text-2xl font-semibold text-green-700">
+            The Number is:{" "}
+            {data.result === "odd" ? (
+              <span className="text-red-500">Odd</span>
+            ) : (
+              <span className="text-red-500">Even</span>
+            )}
+            <br />
+            Number is:{" "}
+            {data.prime === "Prime" ? (
+              <span className="text-red-500">Prime</span>
+            ) : (
+              <span className="text-red-500">Not Prime</span>
+            )}
+          </p>
+        )}
+        {data && data.error && (
+          <p className="mt-8 text-center text-2xl font-semibold text-red-700">
+            {data.error}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}

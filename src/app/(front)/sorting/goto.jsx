@@ -16,9 +16,9 @@ export default function Inp({ name, id }) {
       <input onChange={(e) => setId(e.target.value)} value={idd} />
       <Link
         className="bg-black text-blue-100"
-        href={`/sorting/${idd}?name=${msg}`}
+        href={`/sorting${name || ""}/${idd}?name=${msg}`}
       >
-        Go to
+        Go to {name}
       </Link>
     </>
   );
