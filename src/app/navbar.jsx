@@ -95,9 +95,9 @@ const Navbar = () => {
               ref={userButtonRef}
             >
               {session.user.username
-                ? "Google User"
-                : session.user.username.charAt(0).toUpperCase() +
-                  session.user.username.slice(1)}
+                ? session.user.username.charAt(0).toUpperCase() +
+                  session.user.username.slice(1)
+                : "Google user"}
               🔻
             </button>
             {userDropdownOpen && (
