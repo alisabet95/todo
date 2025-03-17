@@ -9,6 +9,7 @@ export default function Prods() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editProductId, setEditProductId] = useState(null); // Track which product is being edited
+  const [ses, setSes] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -18,7 +19,8 @@ export default function Prods() {
   const fetchProducts = async () => {
     try {
       const res = await axios.get("/api/products");
-      setData(res.data);
+      setData(res.data.pros);
+      setSes(res.data.session);
     } catch (error) {
       console.log(error);
     } finally {
@@ -64,7 +66,9 @@ export default function Prods() {
   return (
     <div className="container mx-auto p-4">
       <header className="mb-4">
-        <h2 className="text-3xl font-bold text-center">Products</h2>
+        <h2 className="text-3xl font-bold text-center">
+          Products {ses && ses.user.username}
+        </h2>
       </header>
       <main>
         <AddPost onAddProduct={handleAddProduct} />

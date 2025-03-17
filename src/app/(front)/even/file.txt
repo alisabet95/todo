@@ -69,3 +69,10 @@ export default function OddOrEven() {
     </div>
   );
 }
+
+
+{"web":{"client_id":"703106272545-c3s6p38f33oinmrk4mdn3tov2f6cbjsb.apps.googleusercontent.com","project_id":"stately-mote-453613-k9",
+"auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token",
+"auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_secret":"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",
+"redirect_uris":["http://localhost:3000","https://todo-album.vercel.app"],"javascript_origins":["http://localhost:3000",
+"https://todo-album.vercel.app"]}}

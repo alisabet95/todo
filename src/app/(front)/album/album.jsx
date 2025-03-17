@@ -34,11 +34,6 @@ export default function Album() {
   const [uploadProgress, setUploadProgress] = useState(0);
 
   // Debugging session data
-  useEffect(() => {
-    console.log("Session Status:", status);
-    console.log("Session Data:", session);
-    console.log("Cookies:", document.cookie); // Check if next-auth.session-token exists
-  }, [status, session]);
 
   // Fetch photos when session is authenticated
   useEffect(() => {
@@ -129,8 +124,9 @@ export default function Album() {
             color: session.user.username === "parisajoon" ? "red" : "black",
           }}
         >
-          {session.user.username === "parisajoon"
-            ? "parisa joone Ali"
+          {session.user.username === "parisajoon" && "parisa joone Ali"}
+          {session.user.username === "unknown"
+            ? "Google user"
             : session.user.username}
         </span>
         !

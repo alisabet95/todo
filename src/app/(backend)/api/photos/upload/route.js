@@ -13,20 +13,24 @@ export async function POST(request) {
 
   const formData = await request.formData();
   const file = formData.get("file");
-  const username = formData.get("username");
+  let username = formData.get("username");
   const title = formData.get("title");
 
-  if (!file || !username) {
-    return NextResponse.json({ error: "Missing file or username" }, { status: 400 });
+  if (!file) {
+    return NextResponse.json({ error: "File is required" }, { status: 400 });
   }
 
-  if (session.user.username !== username) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  }
-
-  const user = await prisma.user.findUnique({
+  // If username is "unknown", use email instead
+  let user = await prisma.user.findUnique({
     where: { username },
   });
+
+  if (!user || username === "unknown") {
+    console.log("User not found by username, trying by email...");
+    user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+    });
+  }
 
   if (!user) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
@@ -53,6 +57,9 @@ export async function POST(request) {
     return NextResponse.json({ message: "Photo uploaded", photo }, { status: 201 });
   } catch (error) {
     console.error("Error uploading file or saving to database:", error);
-    return NextResponse.json({ error: "Server error", details: error.message }, { status: 500 });
+    return NextResponse.json(
+      { error: "Server error", details: error.message },
+      { status: 500 }
+    );
   }
 }

@@ -1,18 +1,17 @@
+// src/app/page.tsx (or wherever your login page is)
 "use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import ButtonD from "./(front)/(material)/button";
 import { signIn } from "next-auth/react";
-import Link from "next/link";
 
-export default function HomeAu() {
+export default function LoginPage() {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
   });
-  const [isRegister, setIsRegister] = useState(true); // Toggle between login and register
+  const [isRegister, setIsRegister] = useState(true);
   const router = useRouter();
 
   const handleSubmit = async (e) => {
@@ -24,7 +23,6 @@ export default function HomeAu() {
     }
 
     if (isRegister) {
-      // Register user
       const res = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -34,16 +32,15 @@ export default function HomeAu() {
       const data = await res.json();
       if (res.ok) {
         alert("User registered successfully!");
-        setIsRegister(false); // Switch to login mode after registration
+        setIsRegister(false);
       } else {
         alert(data.error);
       }
     } else {
-      // Login user
       const res = await signIn("credentials", {
         username: formData.username,
         password: formData.password,
-        redirect: false, // Prevent automatic redirection
+        redirect: false,
       });
 
       if (res?.error) {
@@ -51,6 +48,15 @@ export default function HomeAu() {
       } else {
         router.push("/todo");
       }
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    const res = await signIn("google", { redirect: false });
+    if (res?.error) {
+      alert("Google sign-in failed: " + res.error);
+    } else {
+      router.push("/todo");
     }
   };
 
@@ -115,21 +121,13 @@ export default function HomeAu() {
         >
           {isRegister ? "Register" : "Login"}
         </button>
-        <button
-          onClick={() => signIn("google")}
-          className="bg-red-500 text-white p-2 rounded"
-        >
-          Sign in with Google
-        </button>
       </form>
-      <Link
-        className="text-black bg-red-600 rounded-sm"
-        href="/api/auth/signin"
+      <button
+        onClick={handleGoogleSignIn}
+        className="bg-red-500 text-white p-2 rounded mt-2"
       >
-        Login with google
-      </Link>
-
-      <ButtonD onClick={() => router.push("/sign-page")} ph="Go sign in" />
+        Sign in with Google
+      </button>
     </div>
   );
 }

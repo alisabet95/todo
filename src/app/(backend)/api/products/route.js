@@ -2,16 +2,20 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import schema from "./schema";
 import { prisma } from "@/app/lib/prisma/client";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/lib/authOptions";
 
 const ValidatedZod = z.object({
     title: z.string().min(2,"title is required").max(50,"too long")
 })
 
 
+
 export async function GET(req) {
     try{
    const pros = await prisma.pros.findMany()
-   return NextResponse.json(pros)
+   const session = await getServerSession(authOptions)
+   return NextResponse.json({pros, session})
     }catch(error){
         return NextResponse.json({error: "wrong and failed"})
     }

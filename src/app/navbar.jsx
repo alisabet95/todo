@@ -3,13 +3,19 @@ import Link from "next/link";
 import React, { useState, useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import classNames from "classnames";
+import { useSession, signOut } from "next-auth/react";
 
 const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const currentPath = usePathname();
   const [time, setTime] = useState("");
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
+  const userDropdownRef = useRef(null);
+  const userButtonRef = useRef(null);
+
+  const { status, data: session } = useSession();
 
   const links = [
     { name: "Home", href: "/" },
@@ -23,6 +29,10 @@ const Navbar = () => {
     setDropdownOpen(!dropdownOpen);
   };
 
+  const toggleUserDropdown = () => {
+    setUserDropdownOpen(!userDropdownOpen);
+  };
+
   const handleClickOutside = (event) => {
     if (
       dropdownRef.current &&
@@ -31,10 +41,17 @@ const Navbar = () => {
     ) {
       setDropdownOpen(false);
     }
+    if (
+      userDropdownRef.current &&
+      !userDropdownRef.current.contains(event.target) &&
+      !userButtonRef.current.contains(event.target)
+    ) {
+      setUserDropdownOpen(false);
+    }
   };
 
   useEffect(() => {
-    if (dropdownOpen) {
+    if (dropdownOpen || userDropdownOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -42,7 +59,7 @@ const Navbar = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [dropdownOpen]);
+  }, [dropdownOpen, userDropdownOpen]);
 
   useEffect(() => {
     const updateTime = () => {
@@ -60,10 +77,46 @@ const Navbar = () => {
     return () => clearInterval(timerId);
   }, []);
 
+  console.log(session);
+
   return (
     <nav className="bg-blue-400 rounded-lg p-4 shadow-md">
       <ul className="navbar-links flex flex-wrap items-center space-x-4">
         <p className="text-white text-left fade-in">{time}</p>
+        {status === "authenticated" && (
+          <li className="relative">
+            <button
+              onClick={toggleUserDropdown}
+              className="text-lg text-red-800 bg-none"
+              style={{
+                backgroundColor: "transparent",
+                border: "solid black 0.5px",
+              }}
+              ref={userButtonRef}
+            >
+              {session.user.username
+                ? "Google User"
+                : session.user.username.charAt(0).toUpperCase() +
+                  session.user.username.slice(1)}
+              🔻
+            </button>
+            {userDropdownOpen && (
+              <ul
+                className="dropdown-menu absolute bg-cyan-400 rounded-lg shadow-lg mt-2 p-2 flex flex-col space-y-2"
+                ref={userDropdownRef}
+              >
+                <li>
+                  <button
+                    onClick={() => signOut()}
+                    className="hover-effect text-left w-full"
+                  >
+                    Logout
+                  </button>
+                </li>
+              </ul>
+            )}
+          </li>
+        )}
         {links.map((link, index) => (
           <li key={index}>
             <Link
@@ -80,10 +133,14 @@ const Navbar = () => {
         <li className="relative">
           <button
             onClick={toggleDropdown}
-            className="button-drop text-xl text-white"
+            className="button-drop text-xl text-white py-2 px-4"
             ref={buttonRef}
+            style={{
+              padding: "5px",
+              border: "solid black 0.5px",
+            }}
           >
-            Menu
+            Menu🔻
           </button>
           {dropdownOpen && (
             <ul

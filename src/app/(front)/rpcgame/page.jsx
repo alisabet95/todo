@@ -1,4 +1,5 @@
 import RockPaper from "./rpc";
+import PixelGrid from "./pixels";
 
 export const metadata = {
   title: "Rock Paper Scissors",
@@ -10,6 +11,7 @@ export default function RpsG() {
     <div>
       <h1 className="mb-5 mt-5 pt-5 pb-5">Rock-Paper-Scissors Game</h1>
       <RockPaper />
+      <PixelGrid />
     </div>
   );
 }

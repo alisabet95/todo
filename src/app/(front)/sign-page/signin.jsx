@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { Formik, Field, ErrorMessage, Form } from "formik";
+import { useSession } from "next-auth/react";
 
 import * as Yup from "yup";
 
@@ -15,40 +16,47 @@ const SignInSchema = Yup.object().shape({
     .required("Required"),
 });
 
-const SignIn = () => (
-  <div>
-    <h1>Sign In</h1>
-    <Formik
-      initialValues={{ username: "", email: "", password: "" }}
-      validationSchema={SignInSchema}
-      onSubmit={(values) => {
-        console.log(values);
-      }}
-    >
-      {({ isSubmitting }) => (
-        <Form>
-          <div>
-            <label htmlFor="username">Username</label>
-            <Field type="text" name="username" />
-            <ErrorMessage name="username" component="div" />
-          </div>
-          <div>
-            <label htmlFor="email">Email</label>
-            <Field type="email" name="email" />
-            <ErrorMessage name="email" component="div" />
-          </div>
-          <div>
-            <label htmlFor="password">Password</label>
-            <Field type="password" name="password" />
-            <ErrorMessage name="password" component="div" />
-          </div>
-          <button type="submit" disabled={isSubmitting}>
-            Submit
-          </button>
-        </Form>
-      )}
-    </Formik>
-  </div>
-);
+const SignIn = () => {
+  const { data: session, status } = useSession();
+  console.log(status);
+  // if (status === "authenticated") {
+  //   return <div>Already signed in</div>;}
+
+  return (
+    <div>
+      <h1>Sign In</h1>
+      <Formik
+        initialValues={{ username: "", email: "", password: "" }}
+        validationSchema={SignInSchema}
+        onSubmit={(values) => {
+          console.log(values);
+        }}
+      >
+        {({ isSubmitting }) => (
+          <Form>
+            <div>
+              <label htmlFor="username">Username</label>
+              <Field type="text" name="username" />
+              <ErrorMessage name="username" component="div" />
+            </div>
+            <div>
+              <label htmlFor="email">Email</label>
+              <Field type="email" name="email" />
+              <ErrorMessage name="email" component="div" />
+            </div>
+            <div>
+              <label htmlFor="password">Password</label>
+              <Field type="password" name="password" />
+              <ErrorMessage name="password" component="div" />
+            </div>
+            <button type="submit" disabled={isSubmitting}>
+              Submit
+            </button>
+          </Form>
+        )}
+      </Formik>
+    </div>
+  );
+};
 
 export default SignIn;

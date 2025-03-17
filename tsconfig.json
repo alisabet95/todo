@@ -18,11 +18,17 @@
         "name": "next"
       }
     ],
-    "baseUrl": ".", // Add baseUrl
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"] // Add paths to resolve @/ as src/
-    }
+      "@/*": ["src/*"]
+    },
+    "types": ["next-auth"] // ✅ Add this line
   },
-  "include": ["next-env.d.ts", ".next/types/**/*.ts", "/*.ts", "**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ], // ✅ Ensure all relevant files are included
   "exclude": ["node_modules"]
 }

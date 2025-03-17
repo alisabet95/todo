@@ -1,6 +1,11 @@
 import OddOrEven from "./oddOrEven";
 import styles from "./file.module.css";
 
+export const metadata = {
+  title: "Odd or Even",
+  description: "Check if a number is odd or even",
+};
+
 export default function Page() {
   return (
     <div
