@@ -4,6 +4,7 @@ import { getToken } from "next-auth/jwt";
 export async function middleware(req) {
   console.log("🔥 Middleware is running on:", req.nextUrl.pathname);
 
+  // Check for session token
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
   console.log("🛑 Token in middleware:", token || "No token found");

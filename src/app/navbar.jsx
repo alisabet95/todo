@@ -23,6 +23,7 @@ const Navbar = () => {
     { name: "RPC Game", href: "/rpcgame" },
     { name: "Album", href: "/album" },
     { name: "Ali", href: "/stuff" },
+    { name: "Chat Box", href: "/newchat" },
   ];
 
   const toggleDropdown = () => {
@@ -158,6 +159,13 @@ const Navbar = () => {
                   Profile
                 </Link>
               </li>
+
+              <li>
+                <Link href="/chatbox" className="hover-effect">
+                  Normal Chat
+                </Link>
+              </li>
+
               <li>
                 <Link href="/products" className="hover-effect">
                   Products
