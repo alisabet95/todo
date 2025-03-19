@@ -16,7 +16,7 @@ export default function Todos() {
   useEffect(() => {
     console.log("Session Status:", status);
     console.log("Session Data:", session);
-    console.log("Cookies:", document.cookie); // Check if next-auth.session-token exists
+     // Check if next-auth.session-token exists
   }, [status, session]);
 
   useEffect(() => {
