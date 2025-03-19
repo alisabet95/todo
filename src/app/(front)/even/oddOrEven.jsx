@@ -11,8 +11,6 @@ export default function OddOrEven() {
       const res = await fetch(`/api/odd-or?num=${number}`);
       const data = await res.json();
       setData(data);
-      console.log(data);
-      console.log("Hello from the front-end");
     } catch (error) {
       console.log(error);
     }

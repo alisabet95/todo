@@ -42,7 +42,7 @@ export async function POST(request) {
       token: process.env.BLOB_READ_WRITE_TOKEN,
     });
 
-    console.log("Blob URL:", blob.url);
+
 
     const photo = await prisma.photo.create({
       data: {
@@ -52,7 +52,7 @@ export async function POST(request) {
       },
     });
 
-    console.log("Photo saved to database:", photo);
+   
 
     return NextResponse.json({ message: "Photo uploaded", photo }, { status: 201 });
   } catch (error) {

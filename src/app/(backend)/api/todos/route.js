@@ -4,10 +4,10 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma/client"; // ✅ Correct import
 
 export async function GET(req) {
-  console.log("GET request received");
+  
 
   const session = await getServerSession(authOptions);
-  console.log("Session:", session);
+
 
   if (!session?.user) {
     console.log("User not authenticated");

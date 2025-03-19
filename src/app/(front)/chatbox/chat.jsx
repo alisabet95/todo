@@ -56,7 +56,7 @@ export default function ChatBox() {
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          placeholder="Type your message..."
+          placeholder="Type your messages..."
           disabled={loading}
         />
         <button style={styles.button} onClick={sendMessage} disabled={loading}>

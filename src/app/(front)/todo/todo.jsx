@@ -13,11 +13,6 @@ export default function Todos() {
   const router = useRouter();
 
   // Enhanced debugging
-  useEffect(() => {
-    console.log("Session Status:", status);
-    console.log("Session Data:", session);
-    console.log("Cookies:", document.cookie); // Check if next-auth.session-token exists
-  }, [status, session]);
 
   useEffect(() => {
     if (status === "authenticated") {

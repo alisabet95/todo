@@ -22,8 +22,7 @@ export async function DELETE(request, { params }) {
       return NextResponse.json({ error: "Photo not found" }, { status: 404 });
     }
 
-    console.log("Session User ID:", session.user.id);
-    console.log("Photo User ID:", photo.userId);
+
 
     // Get user by email in case of Google login
     let user = await prisma.user.findUnique({
