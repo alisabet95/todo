@@ -18,5 +18,5 @@ export async function middleware(req) {
 }
 
 export const config = {
-  matcher: ["/todo/:path*", "/album/:path*"], // Only protect these routes
+  matcher: ["/admin/:path*"], // Only protect these routes
 };
