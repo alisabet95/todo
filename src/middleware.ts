@@ -7,7 +7,7 @@ export async function middleware(req) {
   // Check for session token
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
-  console.log("🛑 Token in middleware:", token || "No token found");
+  console.log("🛑 Token in middleware")
 
   if (!token) {
     console.warn("🚨 Unauthorized! Redirecting to login...");
