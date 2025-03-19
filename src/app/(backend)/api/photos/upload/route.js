@@ -42,7 +42,7 @@ export async function POST(request) {
       token: process.env.BLOB_READ_WRITE_TOKEN,
     });
 
-    console.log("Blob URL:", blob.url);
+    
 
     const photo = await prisma.photo.create({
       data: {
