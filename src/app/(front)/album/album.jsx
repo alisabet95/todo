@@ -33,8 +33,6 @@ export default function Album() {
   const [title, setTitle] = useState("");
   const [uploadProgress, setUploadProgress] = useState(0);
 
-  // Debugging session data
-
   // Fetch photos when session is authenticated
   useEffect(() => {
     if (status === "authenticated" && session?.user?.username) {
@@ -44,13 +42,21 @@ export default function Album() {
     }
   }, [status, session]);
 
+  const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+
   const handleUpload = async (e) => {
     e.preventDefault();
     if (!file || !session?.user?.username) return;
 
+    // Check File Size (Prevent Large Uploads)
+    if (file.size > MAX_FILE_SIZE) {
+      alert("File size exceeds 10MB. Please upload a smaller file.");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("username", session.user.username); // Use session.user.username
+    formData.append("username", session.user.username);
     formData.append("title", title);
 
     const xhr = new XMLHttpRequest();
@@ -68,7 +74,7 @@ export default function Album() {
         setFile(null);
         setTitle("");
         setUploadProgress(0);
-        fetchPhotos(session.user.username, setPhotos); // Use session.user.username
+        fetchPhotos(session.user.username, setPhotos);
       } else {
         console.error("Upload failed:", xhr.statusText);
       }
@@ -86,23 +92,20 @@ export default function Album() {
       method: "DELETE",
     });
     if (res.ok) {
-      fetchPhotos(session.user.username, setPhotos); // Use session.user.username
+      fetchPhotos(session.user.username, setPhotos);
     } else {
       console.error("Failed to delete photo:", await res.text());
     }
   };
 
   if (status === "loading") {
-    return <div>Loading...</div>;
+    return <div style={styles.loading}>Loading...</div>;
   }
 
   if (!session) {
     return (
-      <div className="flex flex-col items-center gap-8 p-4">
-        <button
-          onClick={() => signIn()}
-          className="bg-blue-500 text-white p-2 rounded"
-        >
+      <div style={styles.container}>
+        <button onClick={() => signIn()} style={styles.signInButton}>
           Sign In
         </button>
       </div>
@@ -110,14 +113,11 @@ export default function Album() {
   }
 
   return (
-    <div className="flex flex-col items-center gap-8 p-4">
-      <button
-        onClick={() => signOut()}
-        className="bg-red-500 text-white p-2 rounded"
-      >
+    <div style={styles.container}>
+      <button onClick={() => signOut()} style={styles.signOutButton}>
         Sign Out
       </button>
-      <h2 className="text-black">
+      <h2 style={styles.welcomeMessage}>
         Welcome,{" "}
         <span
           style={{
@@ -130,51 +130,48 @@ export default function Album() {
             : session.user.username}
         </span>
         !
-      </h2>{" "}
-      {/* Use session.user.username */}
-      <form onSubmit={handleUpload} className="flex flex-col gap-4 w-1/2">
+      </h2>
+      <form onSubmit={handleUpload} style={styles.form}>
         <input
           type="file"
           onChange={(e) => setFile(e.target.files[0])}
-          className="p-2 border rounded text-black"
+          style={styles.input}
         />
         <input
           type="text"
           placeholder="Photo title (optional)"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="p-2 border rounded text-black text-center"
+          style={styles.input}
         />
-        <ButtonD
-          ph="Upload Photo"
-          type="submit"
-          style={{ textAlign: "center", margin: "0 auto" }}
-          className="bg-green-500 text-white p-2 rounded"
-        />
+        <ButtonD ph="Upload Photo" type="submit" style={styles.uploadButton} />
       </form>
       {uploadProgress > 0 && (
-        <div className="w-1/2 bg-gray-200 rounded-full h-4 mb-4">
+        <div style={styles.progressBarContainer}>
           <div
-            className="bg-blue-500 h-4 rounded-full"
-            style={{ width: `${uploadProgress}%` }}
+            style={{
+              ...styles.progressBar,
+              width: `${uploadProgress}%`,
+            }}
           ></div>
-          <p className="text-center text-black">{uploadProgress}%</p>
+          <p style={styles.progressText}>{uploadProgress}%</p>
         </div>
       )}
-      <div className="grid grid-cols-2 gap-4">
+      <div style={styles.photoGrid}>
         {photos.map((photo) => (
-          <div key={photo.id} className="border p-2 rounded">
+          <div key={photo.id} style={styles.photoCard}>
             <img
               src={photo.url}
               alt={photo.title || "Photo"}
-              className="w-full h-auto"
+              style={styles.photo}
             />
-            <p>{photo.title || "No title"}</p>
-            <p>{new Date(photo.uploadedAt).toLocaleDateString()}</p>
+            <p style={styles.photoTitle}>{photo.title || "No title"}</p>
+            <p style={styles.photoDate}>
+              {new Date(photo.uploadedAt).toLocaleDateString()}
+            </p>
             <ButtonD
-              style={{ textAlign: "center", margin: "0 auto" }}
               onClick={() => handleDelete(photo.id)}
-              className="bg-red-500 text-white p-2 rounded mt-2 text-center"
+              style={styles.deleteButton}
               ph="Delete"
             />
           </div>
@@ -183,3 +180,123 @@ export default function Album() {
     </div>
   );
 }
+
+const styles = {
+  container: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: "16px",
+    padding: "16px",
+  },
+  loading: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100vh",
+    fontSize: "24px",
+  },
+  signInButton: {
+    backgroundColor: "#3b82f6",
+    color: "white",
+    padding: "12px 24px",
+    borderRadius: "8px",
+    cursor: "pointer",
+    border: "none",
+    fontSize: "16px",
+  },
+  signOutButton: {
+    backgroundColor: "#ef4444",
+    color: "white",
+    padding: "12px 24px",
+    borderRadius: "8px",
+    cursor: "pointer",
+    border: "none",
+    fontSize: "16px",
+  },
+  welcomeMessage: {
+    fontSize: "24px",
+    fontWeight: "bold",
+    color: "#333",
+  },
+  form: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "16px",
+    width: "100%",
+    maxWidth: "400px",
+  },
+  input: {
+    padding: "12px",
+    borderRadius: "8px",
+    border: "1px solid #ccc",
+    fontSize: "16px",
+  },
+  uploadButton: {
+    backgroundColor: "#10b981",
+    color: "white",
+    padding: "12px 24px",
+    borderRadius: "8px",
+    cursor: "pointer",
+    border: "none",
+    fontSize: "16px",
+    textAlign: "center",
+    margin: "0 auto",
+  },
+  progressBarContainer: {
+    width: "100%",
+    maxWidth: "400px",
+    backgroundColor: "#e5e7eb",
+    borderRadius: "8px",
+    height: "24px",
+    marginBottom: "16px",
+  },
+  progressBar: {
+    backgroundColor: "#3b82f6",
+    height: "100%",
+    borderRadius: "8px",
+  },
+  progressText: {
+    textAlign: "center",
+    color: "#333",
+    marginTop: "8px",
+  },
+  photoGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(3, 1fr)",
+    gap: "16px",
+    width: "100%",
+    maxWidth: "1200px",
+  },
+  photoCard: {
+    border: "1px solid #ccc",
+    padding: "16px",
+    borderRadius: "8px",
+    textAlign: "center",
+  },
+  photo: {
+    width: "100%",
+    height: "300px",
+    objectFit: "cover",
+    borderRadius: "8px",
+  },
+  photoTitle: {
+    fontWeight: "bold",
+    marginTop: "8px",
+  },
+  photoDate: {
+    color: "#6b7280",
+    marginTop: "4px",
+  },
+  deleteButton: {
+    backgroundColor: "#ef4444",
+    color: "white",
+    padding: "8px 16px",
+    borderRadius: "8px",
+    cursor: "pointer",
+    border: "none",
+    marginTop: "8px",
+    textAlign: "center",
+    margin: "0 auto",
+  },
+};

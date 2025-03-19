@@ -140,3 +140,9 @@ input{
 span{
   @apply text-black text-center
  }
+
+ @media (max-width: 768px) {
+  footer {
+    display: none;
+  }
+}

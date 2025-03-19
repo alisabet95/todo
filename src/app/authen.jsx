@@ -98,7 +98,7 @@ export default function HomeAu({ name }) {
       if (res?.error) {
         alert("Google sign-in failed: " + res.error);
       } else {
-        router.push("/todo");
+        router.push("/");
       }
     } finally {
       setIsLoading(false);
@@ -107,108 +107,116 @@ export default function HomeAu({ name }) {
 
   return (
     <div style={styles.container}>
-      <h1>Hello {name === "unknown" ? "Google User" : name}</h1>
-      <h2 style={styles.title}>{isRegister ? "Register" : "Login"}</h2>
-      <div style={styles.toggleContainer}>
-        <button
-          onClick={() => setIsRegister(true)}
-          style={{
-            ...styles.toggleButton,
-            backgroundColor: isRegister ? "#3b82f6" : "#e5e7eb",
-            color: isRegister ? "white" : "black",
-          }}
-          disabled={isLoading}
+      <header>
+        {" "}
+        <h1>Hello {name === "unknown" ? "Google User" : name}</h1>
+      </header>
+      <main>
+        {" "}
+        <h2 style={styles.title}>{isRegister ? "Register" : "Login"}</h2>
+        <div style={styles.toggleContainer}>
+          <button
+            onClick={() => setIsRegister(true)}
+            style={{
+              ...styles.toggleButton,
+              backgroundColor: isRegister ? "#3b82f6" : "#e5e7eb",
+              color: isRegister ? "white" : "black",
+            }}
+            disabled={isLoading}
+          >
+            Register
+          </button>
+          <button
+            onClick={() => setIsRegister(false)}
+            style={{
+              ...styles.toggleButton,
+              backgroundColor: !isRegister ? "#3b82f6" : "#e5e7eb",
+              color: !isRegister ? "white" : "black",
+            }}
+            disabled={isLoading}
+          >
+            Login
+          </button>
+        </div>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={isRegister ? registerSchema : loginSchema}
+          onSubmit={handleSubmit}
+          validateOnBlur
         >
-          Register
-        </button>
-        <button
-          onClick={() => setIsRegister(false)}
-          style={{
-            ...styles.toggleButton,
-            backgroundColor: !isRegister ? "#3b82f6" : "#e5e7eb",
-            color: !isRegister ? "white" : "black",
-          }}
-          disabled={isLoading}
-        >
-          Login
-        </button>
-      </div>
-
-      <Formik
-        initialValues={initialValues}
-        validationSchema={isRegister ? registerSchema : loginSchema}
-        onSubmit={handleSubmit}
-        validateOnBlur
-      >
-        {({ isSubmitting }) => (
-          <Form style={styles.form}>
-            <div style={styles.inputContainer}>
-              <Field
-                name="username"
-                type="text"
-                placeholder="Username"
-                style={styles.input}
-                disabled={isLoading}
-              />
-              <ErrorMessage
-                name="username"
-                component="p"
-                style={styles.errorMessage}
-              />
-            </div>
-
-            {isRegister && (
+          {({ isSubmitting }) => (
+            <Form style={styles.form}>
               <div style={styles.inputContainer}>
                 <Field
-                  name="email"
-                  type="email"
-                  placeholder="Email"
+                  name="username"
+                  type="text"
+                  placeholder="Username"
                   style={styles.input}
                   disabled={isLoading}
                 />
                 <ErrorMessage
-                  name="email"
+                  name="username"
                   component="p"
                   style={styles.errorMessage}
                 />
               </div>
-            )}
 
-            <div style={styles.inputContainer}>
-              <Field
-                name="password"
-                type="password"
-                placeholder="Password"
-                style={styles.input}
+              {isRegister && (
+                <div style={styles.inputContainer}>
+                  <Field
+                    name="email"
+                    type="email"
+                    placeholder="Email"
+                    style={styles.input}
+                    disabled={isLoading}
+                  />
+                  <ErrorMessage
+                    name="email"
+                    component="p"
+                    style={styles.errorMessage}
+                  />
+                </div>
+              )}
+
+              <div style={styles.inputContainer}>
+                <Field
+                  name="password"
+                  type="password"
+                  placeholder="Password"
+                  style={styles.input}
+                  disabled={isLoading}
+                />
+                <ErrorMessage
+                  name="password"
+                  component="p"
+                  style={styles.errorMessage}
+                />
+              </div>
+
+              <button
+                type="submit"
+                style={styles.submitButton}
+                disabled={isLoading || isSubmitting}
+              >
+                {isLoading
+                  ? "Processing..."
+                  : isRegister
+                  ? "Register"
+                  : "Login"}
+              </button>
+
+              <button
+                onClick={handleGoogleSignIn}
+                style={styles.googleButton}
                 disabled={isLoading}
-              />
-              <ErrorMessage
-                name="password"
-                component="p"
-                style={styles.errorMessage}
-              />
-            </div>
-
-            <button
-              type="submit"
-              style={styles.submitButton}
-              disabled={isLoading || isSubmitting}
-            >
-              {isLoading ? "Processing..." : isRegister ? "Register" : "Login"}
-            </button>
-
-            <button
-              onClick={handleGoogleSignIn}
-              style={styles.googleButton}
-              disabled={isLoading}
-            >
-              {isLoading ? "Processing..." : "Sign in with Google"}
-            </button>
-          </Form>
-        )}
-      </Formik>
-
-      <ButtonD onClick={() => router.push("/sign-page")} ph="Go sign in" />
+              >
+                {isLoading ? "Processing..." : "Sign in with Google"}
+              </button>
+            </Form>
+          )}
+        </Formik>
+        <ButtonD onClick={() => router.push("/sign-page")} ph="Go sign in" />{" "}
+      </main>
     </div>
   );
 }

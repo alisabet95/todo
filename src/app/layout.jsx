@@ -14,11 +14,14 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={` antialiased`}>
+      <body className={`flex flex-col min-h-screen antialiased`}>
         <AppWrapper>
           <Navbar />
           {children}
         </AppWrapper>
+        <footer className="mt-auto text-left text-xs text-black p-4">
+          © 2023 Ali Sabet <address>Rasht,Iran</address>
+        </footer>
       </body>
     </html>
   );
